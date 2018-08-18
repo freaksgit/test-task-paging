@@ -14,4 +14,5 @@ class UtilsModule {
     @Singleton
     @Provides
     fun provideDeviceUtils(@Named(DiNames.APP_CONTEXT) context: Context) = DeviceUtils(context)
+
 }
