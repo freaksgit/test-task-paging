@@ -7,4 +7,5 @@ interface SchedulerProvider {
     fun computation(): Scheduler
     fun trampoline(): Scheduler
     fun newThread(): Scheduler
-    fun io(): Scheduler }
+    fun io(): Scheduler
+}
