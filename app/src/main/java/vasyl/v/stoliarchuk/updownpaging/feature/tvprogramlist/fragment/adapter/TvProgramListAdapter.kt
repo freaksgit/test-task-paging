@@ -56,6 +56,13 @@ class TvProgramListAdapter() : RecyclerView.Adapter<TvProgramListAdapter.TvProgr
         }
     }
 
+    fun getFirstItem(): TvProgram {
+        return data[0]
+    }
+
+    fun getLastItem(): TvProgram {
+        return data[data.size - 1]
+    }
 
     class TvProgramViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvName: TextView = itemView.item_tv_program_list_name

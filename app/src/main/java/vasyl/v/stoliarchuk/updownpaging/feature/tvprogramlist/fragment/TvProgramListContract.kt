@@ -6,12 +6,18 @@ interface TvProgramListContract {
 
     interface View {
         fun addData(data: List<TvProgram>)
+        fun getFirstTvProgram(): TvProgram
+        fun getLastTvProgram(): TvProgram
+        fun toggleProgressVisibility(visible: Boolean)
+        fun scrollToPosition(position: Int)
+        fun addDataToBeginning(data: List<TvProgram>)
 
     }
 
 
     interface Presenter {
         fun subscribe()
+        fun onPrefetchNextPage(direction: Int)
         fun unsubscribe()
 
     }

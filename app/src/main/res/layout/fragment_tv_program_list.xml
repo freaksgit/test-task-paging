@@ -3,14 +3,19 @@
     android:id="@+id/fragment_tv_program_list_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <ProgressBar
         android:id="@+id/fragment_tv_program_list_loading_progress"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
-        android:layout_height="4dp" />
-<android.support.v7.widget.RecyclerView
-    android:id="@+id/fragment_tv_program_list_recycler"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="invisible" />
 
-</android.support.v7.widget.RecyclerView></FrameLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_tv_program_list_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+</FrameLayout>

@@ -8,6 +8,7 @@ import vasyl.v.stoliarchuk.updownpaging.data.tvprogram.datasource.TvProgramDataS
 import vasyl.v.stoliarchuk.updownpaging.di.DiNames
 import vasyl.v.stoliarchuk.updownpaging.di.FragmentScope
 import vasyl.v.stoliarchuk.updownpaging.feature.tvprogramlist.fragment.adapter.TvProgramListAdapter
+import vasyl.v.stoliarchuk.updownpaging.feature.tvprogramlist.fragment.paging.PagingVerticalScrollListener
 import javax.inject.Named
 
 @Module
@@ -32,6 +33,13 @@ abstract class TvProgramListFragmentModule {
         @FragmentScope
         fun provideTvProgramListAdapter(): TvProgramListAdapter {
             return TvProgramListAdapter()
+        }
+
+        @JvmStatic
+        @Provides
+        @FragmentScope
+        fun providePagingVerticalScrollListener(): PagingVerticalScrollListener {
+            return PagingVerticalScrollListener(15)
         }
     }
 
