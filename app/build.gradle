@@ -28,6 +28,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
+    implementation "com.android.support:exifinterface:$rootProject.ext.supportLibraryVersion"
     implementation "com.android.support.constraint:constraint-layout:$rootProject.ext.supportConstraintLayoutVersion"
     implementation "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"
     testImplementation "junit:junit:$rootProject.ext.junitVersion"
@@ -62,4 +63,9 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.ext.okHttpLogginVersion"
 
     implementation "com.squareup.picasso:picasso:$rootProject.ext.picassoVersion"
+
+    implementation("com.cantrowitz:rxbroadcast:$rootProject.ext.rxBroadcastVersion"){
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'com.android.support', module: 'exifinterface'
+    }
 }

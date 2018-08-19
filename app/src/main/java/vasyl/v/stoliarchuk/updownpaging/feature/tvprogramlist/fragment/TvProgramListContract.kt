@@ -21,7 +21,5 @@ interface TvProgramListContract {
         fun subscribe()
         fun onPrefetchNextPage(direction: Int)
         fun unsubscribe()
-        fun onRetryButtonClicked()
-
     }
 }

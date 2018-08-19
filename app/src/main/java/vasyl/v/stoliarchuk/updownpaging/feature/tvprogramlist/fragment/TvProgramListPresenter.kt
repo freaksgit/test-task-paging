@@ -1,20 +1,23 @@
 package vasyl.v.stoliarchuk.updownpaging.feature.tvprogramlist.fragment
 
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import vasyl.v.stoliarchuk.updownpaging.common.schedulers.SchedulerProvider
 import vasyl.v.stoliarchuk.updownpaging.data.tvprogram.datasource.TvProgramDataSource
 import vasyl.v.stoliarchuk.updownpaging.data.tvprogram.entity.Direction
 import vasyl.v.stoliarchuk.updownpaging.data.tvprogram.entity.QueryData
+import vasyl.v.stoliarchuk.updownpaging.gateway.connectivity.ConnectivityTracker
 
 class TvProgramListPresenter(
         private val mvpView: TvProgramListContract.View,
         private val programRepository: TvProgramDataSource,
-        private val schedulerProvider: SchedulerProvider
+        private val schedulerProvider: SchedulerProvider,
+        private val connectivityTracker: ConnectivityTracker
 ) : TvProgramListContract.Presenter {
 
     private val disposables: CompositeDisposable = CompositeDisposable()
     private var loading = false
-
+    private lateinit var connectivityDisposable: Disposable
     private var lastQuery: QueryData? = null
 
     override fun subscribe() {
@@ -51,15 +54,20 @@ class TvProgramListPresenter(
         }
     }
 
+
     private fun onError(t: Throwable) {
         t.printStackTrace()
         mvpView.showErrorMessage()
         setLoading(false)
-    }
-
-    override fun onRetryButtonClicked() {
-        mvpView.dismissErrorMessage()
-        loadLastQuery()
+        connectivityDisposable = connectivityTracker.listenConnectivityState()
+                .subscribe({
+                    if (it) {
+                        mvpView.dismissErrorMessage()
+                        loadLastQuery()
+                        connectivityDisposable.dispose()
+                    }
+                })
+        disposables.add(connectivityDisposable)
     }
 
     private fun loadLastQuery() {

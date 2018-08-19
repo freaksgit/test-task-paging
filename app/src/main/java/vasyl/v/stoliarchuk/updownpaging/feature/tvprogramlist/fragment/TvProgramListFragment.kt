@@ -35,7 +35,7 @@ class TvProgramListFragment : DaggerFragment(), TvProgramListContract.View {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var progress: ProgressBar
-
+    private var errorMessageVisible = false
     private var progressBarProvider: ProgressBarProvider? = null
 
     companion object {
@@ -128,12 +128,13 @@ class TvProgramListFragment : DaggerFragment(), TvProgramListContract.View {
 
 
     override fun showErrorMessage() {
-        errorSnackbar = Snackbar.make(activity!!.findViewById(android.R.id.content), getString(R.string.fragment_tv_list_error_message),
-                Snackbar.LENGTH_LONG)
-                .setAction(getString(R.string.fragment_tv_list_error_message_action_retry), {
-                    presenter.onRetryButtonClicked()
-                })
-        errorSnackbar.show()
+        if (!errorMessageVisible) {
+            errorMessageVisible = true
+            errorSnackbar = Snackbar.make(activity!!.findViewById(android.R.id.content), getString(R.string.fragment_tv_list_error_message),
+                    Snackbar.LENGTH_LONG)
+                    .addCallback(snackCallback)
+            errorSnackbar.show()
+        }
     }
 
     override fun dismissErrorMessage() {
@@ -148,5 +149,12 @@ class TvProgramListFragment : DaggerFragment(), TvProgramListContract.View {
 
     interface ProgressBarProvider {
         fun getProgressBar(): ProgressBar
+    }
+
+    private val snackCallback: Snackbar.Callback = object : Snackbar.Callback() {
+
+        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+            errorMessageVisible = false
+        }
     }
 }
