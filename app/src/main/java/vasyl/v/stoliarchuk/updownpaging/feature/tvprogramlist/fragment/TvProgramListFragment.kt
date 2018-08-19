@@ -1,5 +1,6 @@
 package vasyl.v.stoliarchuk.updownpaging.feature.tvprogramlist.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -30,10 +31,25 @@ class TvProgramListFragment : DaggerFragment(), TvProgramListContract.View {
     private lateinit var recyclerView: RecyclerView
     private lateinit var progress: ProgressBar
 
+    private var progressBarProvider: ProgressBarProvider? = null
 
     companion object {
         @JvmStatic
         fun newInstance() = TvProgramListFragment()
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        try {
+            progressBarProvider = context as ProgressBarProvider
+        } catch (e: ClassCastException) {
+            throw ClassCastException("$context should implement ProgressBarProvider interface")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        progressBarProvider = null
     }
 
 
@@ -42,7 +58,7 @@ class TvProgramListFragment : DaggerFragment(), TvProgramListContract.View {
                 .inflate(R.layout.fragment_tv_program_list, container, false)
         initPagingScrollListener()
         initRecycler(rootView)
-        progress = rootView.findViewById(R.id.fragment_tv_program_list_loading_progress)
+        progress = progressBarProvider!!.getProgressBar()
         return rootView
     }
 
@@ -109,5 +125,9 @@ class TvProgramListFragment : DaggerFragment(), TvProgramListContract.View {
     override fun onDestroy() {
         super.onDestroy()
         presenter.unsubscribe()
+    }
+
+    interface ProgressBarProvider {
+        fun getProgressBar(): ProgressBar
     }
 }
