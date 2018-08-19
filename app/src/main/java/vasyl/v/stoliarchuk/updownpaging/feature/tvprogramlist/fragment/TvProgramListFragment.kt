@@ -2,6 +2,7 @@ package vasyl.v.stoliarchuk.updownpaging.feature.tvprogramlist.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -19,6 +20,7 @@ import javax.inject.Inject
 
 class TvProgramListFragment : DaggerFragment(), TvProgramListContract.View {
 
+
     @Inject
     lateinit var presenter: TvProgramListContract.Presenter
 
@@ -27,6 +29,9 @@ class TvProgramListFragment : DaggerFragment(), TvProgramListContract.View {
 
     @Inject
     lateinit var pagingVerticalScrollListener: PagingVerticalScrollListener
+
+    lateinit var errorSnackbar: Snackbar
+
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var progress: ProgressBar
@@ -122,8 +127,22 @@ class TvProgramListFragment : DaggerFragment(), TvProgramListContract.View {
     }
 
 
+    override fun showErrorMessage() {
+        errorSnackbar = Snackbar.make(activity!!.findViewById(android.R.id.content), getString(R.string.fragment_tv_list_error_message),
+                Snackbar.LENGTH_LONG)
+                .setAction(getString(R.string.fragment_tv_list_error_message_action_retry), {
+                    presenter.onRetryButtonClicked()
+                })
+        errorSnackbar.show()
+    }
+
+    override fun dismissErrorMessage() {
+        errorSnackbar.dismiss()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
+        dismissErrorMessage()
         presenter.unsubscribe()
     }
 

@@ -11,6 +11,8 @@ interface TvProgramListContract {
         fun toggleProgressVisibility(visible: Boolean)
         fun scrollToPosition(position: Int)
         fun addDataToBeginning(data: List<TvProgram>)
+        fun showErrorMessage()
+        fun dismissErrorMessage()
 
     }
 
@@ -19,6 +21,7 @@ interface TvProgramListContract {
         fun subscribe()
         fun onPrefetchNextPage(direction: Int)
         fun unsubscribe()
+        fun onRetryButtonClicked()
 
     }
 }

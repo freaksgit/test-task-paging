@@ -4,6 +4,7 @@ import io.reactivex.disposables.CompositeDisposable
 import vasyl.v.stoliarchuk.updownpaging.common.schedulers.SchedulerProvider
 import vasyl.v.stoliarchuk.updownpaging.data.tvprogram.datasource.TvProgramDataSource
 import vasyl.v.stoliarchuk.updownpaging.data.tvprogram.entity.Direction
+import vasyl.v.stoliarchuk.updownpaging.data.tvprogram.entity.QueryData
 
 class TvProgramListPresenter(
         private val mvpView: TvProgramListContract.View,
@@ -14,6 +15,7 @@ class TvProgramListPresenter(
     private val disposables: CompositeDisposable = CompositeDisposable()
     private var loading = false
 
+    private var lastQuery: QueryData? = null
 
     override fun subscribe() {
         loadData(getBorderId(Direction.DEFAULT), Direction.DEFAULT)
@@ -28,6 +30,7 @@ class TvProgramListPresenter(
     private fun loadData(borderId: Int, direction: Direction) {
         if (!loading) {
             setLoading(true)
+            lastQuery = QueryData(borderId, direction)
             val disposable = programRepository.getTvPrograms(borderId, direction.value)
                     .subscribeOn(schedulerProvider.io())
                     .observeOn(schedulerProvider.ui())
@@ -43,9 +46,24 @@ class TvProgramListPresenter(
                                 }
                                 setLoading(false)
                             },
-                            { it.printStackTrace() })
+                            { onError(it) })
             disposables.add(disposable)
         }
+    }
+
+    private fun onError(t: Throwable) {
+        t.printStackTrace()
+        mvpView.showErrorMessage()
+        setLoading(false)
+    }
+
+    override fun onRetryButtonClicked() {
+        mvpView.dismissErrorMessage()
+        loadLastQuery()
+    }
+
+    private fun loadLastQuery() {
+        loadData(lastQuery?.borderId ?: 0, lastQuery?.direction ?: Direction.DEFAULT)
     }
 
     private fun setLoading(loading: Boolean) {

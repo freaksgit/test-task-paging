@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">UpDownPaging</string>
+    <string name="fragment_tv_list_error_message">Smth going wrong. Check your internet connection and try again</string>
+    <string name="fragment_tv_list_error_message_action_retry">RETRY</string>
 </resources>
